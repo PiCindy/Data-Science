@@ -1,2 +1,2 @@
-# Data-Sicence
+# Data-Science
 Data Science Project 
