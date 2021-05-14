@@ -22,7 +22,7 @@ def create_list(q, k):
     sparql.setReturnFormat(JSON)
     # Getting the results
     results = sparql.query().convert()
-    return [result['item']['value'].split('/')[-1] for result in results["results"]["bindings"][:k]]
+    return [result['item']['value'].split('/')[-1] for result in results["results"]["bindings"][:k+max(k//2,10)]]
 
 def title_desc(identifier):
     '''
@@ -37,23 +37,27 @@ def title_desc(identifier):
     page.get_wikidata()
     return page.data['title'], page.data['description']
 
-def create_data(persons, category, n):
+def create_data(persons, category, k, n):
     '''
     Fills a list data with each person info
     Input:
     persons (list): list of persons
     category (str): category of the list
+    k (int): number of persons per category
     n (int): number of sentences per person
     '''
-    data = []
     # Finding the type of the category
+    data = []
     t = ''
     if category == 'singer' or category == 'writer' or category == 'painter':
         t = 'A'
     elif category == 'architect' or category == 'politician' or category == 'mathematician':
         t = 'Z'
     # Getting data for every person
-    for p in persons:
+    i = 0
+    while len(data) < k and i < len(persons):
+        p = persons[i]
+        i+=1
         try:
             # Getting title and description
             title, desc = title_desc(p)
@@ -74,7 +78,8 @@ def create_data(persons, category, n):
             continue
         except wikipedia.DisambiguationError:
             continue
-    data.to_csv('data.csv')
+    return data
+
 
 def extraction(k=30, n=5):
     '''
@@ -96,5 +101,11 @@ def extraction(k=30, n=5):
     variables = [singers, writers, painters, architects, politicians, mathematicians]
     categories = ['singer', 'writer', 'painter', 'architect', 'politician', 'mathematician']
 
+    data = []
     for v, c in zip(variables, categories):
-        create_data(v, c, n)
+        data.extend(create_data(v, c, k, n))
+    data.to_csv('data.csv')
+
+
+if __name__ == "__main__":
+    extraction()

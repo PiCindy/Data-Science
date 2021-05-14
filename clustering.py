@@ -3,7 +3,7 @@ from nltk import word_tokenize
 from sklearn import metrics
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN
 
 
 def clustering(data, n, m):
@@ -22,7 +22,7 @@ def clustering(data, n, m):
                                            stop_words='english',
                                            tokenizer=word_tokenize,
                                            ngram_range=(1, 3))
-        matrix = tfidf_vectorizer.fit_transform(data)
+        matrix = tfidf_vectorizer.fit_transform(data).todense()
 
     elif m == 'token frequency':
         vectorizer = CountVectorizer(binary=False)
@@ -34,9 +34,11 @@ def clustering(data, n, m):
         x_count = vectorizer.fit_transform(data)
         matrix = x_count.todense()
 
-    km = KMeans(n_clusters=n, init='k-means++', max_iter=300, n_init=5, verbose=0, random_state=3425)
-    km.fit(matrix)
-    pred_labels = km.labels_
+    #km = KMeans(n_clusters=n, init='k-means++', max_iter=300, n_init=30, verbose=0, random_state=3425)
+    #km.fit(matrix)
+    ac = AgglomerativeClustering(n_clusters=n, affinity='euclidean', memory=None, connectivity=None, compute_full_tree='auto', linkage='ward', distance_threshold=None, compute_distances=False)
+    ac.fit(matrix)
+    pred_labels = ac.labels_
     return pred_labels, matrix, n
 
 def scores(pred_labels, matrix, n):
@@ -78,11 +80,12 @@ def visualization(pred_labels, matrix, n):
     print("Adjusted Rand index: ", rand_index)
 
 
-data = pd.read_csv("processed_data.csv", sep=',')
-methods = ['tf-idf', 'token frequency', 'tokens']
-clusters = [2, 6]
-for m in methods:
-    for c in clusters:
-        print(f'Clustering results using {c} clusters and method {m}')
-        visualization(*clustering(data["processed_text"], c, m))
-        print()
+if __name__ == "__main__":
+    data = pd.read_csv('processed_data.csv', sep=',')
+    methods = ['tf-idf', 'token frequency', 'tokens']
+    clusters = [2, 6]
+    for m in methods:
+        for c in clusters:
+            print(f'Clustering results using {c} clusters and method {m}')
+            visualization(*clustering(data["processed_text"], c, m))
+            print()
