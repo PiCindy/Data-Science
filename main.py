@@ -1,32 +1,14 @@
-import nltk
 import extraction
-import pandas as pd
-from nltk.corpus import stopwords
+import clustering
+import classification
 
-def preprocessing(text):
-    """
-    Application of all preprocessing methods on the text.
-    Input:
-    text (string): a Wikipedia summary or Wikidata description
-    Output:
-    processed: the text after preprocessing
-    """
-    # Tokenize the text
-    processed = nltk.word_tokenize(text)
-    # Lowercase the tokens
-    processed = [token.lower() for token in processed]
-    # Remove stop words
-    en_stopwords = stopwords.words('english')
-    processed = [token for token in processed if token not in en_stopwords]
-    return ' '.join(processed)
-
-df = pd.read_csv('data.csv', sep=',')
-data = pd.DataFrame()
-data['person'] = df['person']
-data['text'] = df['text']
-data['processed_text'] = df['text'].apply(preprocessing)
-data['description'] = df['description']
-data['processed_description'] = df['description'].apply(preprocessing)
-data['type'] = df['type']
-data['category'] = df['category']
-data.to_csv('processed_data.csv', index=False)
+if __name__ == "__main__":
+    # Data is already created, not necessary to run if it the parameters stay the same
+    # Add parameters to change number of persons per category and number of sentences per description
+    # extraction.extraction()
+    # Preprocessed data is already created, not necessary to run it if the extraction didn't change
+    # preprocessing.main()
+    # Clustering
+    clustering.main()
+    # Classification
+    classification.main()
