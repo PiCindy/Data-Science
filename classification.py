@@ -57,14 +57,14 @@ def run_classification(data):
                                        use_idf=True,
                                        stop_words='english', #the stop words to be removed
                                        tokenizer=nltk.word_tokenize, #the way of tokenizing
-                                       ngram_range=(1, 3)) 
+                                       ngram_range=(1, 3))
     X_tfidf = tfidf_vectorizer.fit_transform(data["processed_text"])
     y_cat = data['category']
     y_type = data['type']
     X_train, X_test, y_cat_train, y_cat_test, y_type_train, y_type_test = train_test_split(X_tfidf, y_cat, y_type,
                                                                                            test_size=0.3, stratify=y_cat)
-    classification_algos = [SGDClassifier(max_iter=1000, tol=1e-3), 
-                           SVC(gamma='auto'), 
+    classification_algos = [SGDClassifier(max_iter=1000, tol=1e-3),
+                           SVC(gamma='auto'),
                            MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(10, 5), random_state=1)]
     for algo in classification_algos:
         algo.fit(X_train, y_cat_train)

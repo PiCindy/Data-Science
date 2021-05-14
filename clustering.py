@@ -9,6 +9,7 @@ from sklearn.cluster import KMeans
 def clustering(data, n, m):
     """Clustering algorithm
     Input:
+    data ():
     n (int): number of clusters
     m (str): representation method
     Output:
@@ -21,81 +22,67 @@ def clustering(data, n, m):
                                            stop_words='english',
                                            tokenizer=word_tokenize,
                                            ngram_range=(1, 3))
-        tfidf_matrix = tfidf_vectorizer.fit_transform(data)
-        km = KMeans(n_clusters=n, init='k-means++', max_iter=300, n_init=5, verbose=0, random_state=3425)
-        matrix = km.fit(tfidf_matrix)
-        pred_labels = km.labels_
-        return pred_labels, matrix, n
+        matrix = tfidf_vectorizer.fit_transform(data)
 
     elif m == 'token frequency':
         vectorizer = CountVectorizer(binary=False)
         x_count = vectorizer.fit_transform(data)
-        token_freq_matrix = x_count.todense()
-        km = KMeans(n_clusters=n, init='k-means++', max_iter=300, n_init=5, verbose=0, random_state=3425)
-        matrix = km.fit(token_freq_matrix)
-        pred_labels = km.labels_
-        return pred_labels, matrix, n
+        matrix = x_count.todense()
 
     elif m == 'tokens':
         vectorizer = CountVectorizer(binary=True)
         x_count = vectorizer.fit_transform(data)
-        token_freq_matrix = x_count.todense()
-        km = KMeans(n_clusters=n, init='k-means++', max_iter=300, n_init=5, verbose=0, random_state=3425)
-        matrix = km.fit(token_freq_matrix)
-        pred_labels = km.labels_
-        return pred_labels, matrix, n
+        matrix = x_count.todense()
 
+    km = KMeans(n_clusters=n, init='k-means++', max_iter=300, n_init=5, verbose=0, random_state=3425)
+    km.fit(matrix)
+    pred_labels = km.labels_
+    return pred_labels, matrix, n
 
-def scores():
+def scores(pred_labels, matrix, n):
     """
     Compute evaluation scores:
     Output: silhouette coeff, homogeneity, completeness, v-measure, adjusted Rand index
     """
-    pred_labels, matrix, n = clustering(text, clusters, method)
+
+    sil = metrics.silhouette_score(matrix, pred_labels, sample_size=1000)
 
     if n == 6:
-        labels = my_data["category"]
-        sil = metrics.silhouette_score(matrix, pred_labels, sample_size=1000)
-        homo = metrics.homogeneity_score(labels, pred_labels)
-        compl = metrics.completeness_score(labels, pred_labels)
-        vm = metrics.v_measure_score(labels, pred_labels)
-        rand = metrics.adjusted_rand_score(labels, pred_labels)
-        return sil, homo, compl, vm, rand
-
+        labels = data["category"]
     elif n == 2:
-        labels = my_data["type"]
-        sil = metrics.silhouette_score(matrix, pred_labels, sample_size=1000)
-        homo = metrics.homogeneity_score(labels, pred_labels)
-        compl = metrics.completeness_score(labels, pred_labels)
-        vm = metrics.v_measure_score(labels, pred_labels)
-        rand = metrics.adjusted_rand_score(labels, pred_labels)
-        return sil, homo, compl, vm, rand
+        labels = data["type"]
+    else:
+        return sil, None, None, None, None
+
+    homo = metrics.homogeneity_score(labels, pred_labels)
+    compl = metrics.completeness_score(labels, pred_labels)
+    vm = metrics.v_measure_score(labels, pred_labels)
+    rand = metrics.adjusted_rand_score(labels, pred_labels)
+    return sil, homo, compl, vm, rand
 
 
-def visualization():
+def visualization(pred_labels, matrix, n):
     """
     Visualise metrics for each input representation
     5 scores for each possible result (2/6 clusters, token/tokens freq/tf-idf)
     Output: Print each score
     """
-    silhouette, homogeneity, completeness, v_measure, rand_index = scores()
+    silhouette, homogeneity, completeness, v_measure, rand_index = scores(pred_labels, matrix, n)
 
-    print("Intrinsic scores:",
-          "Silhouette coefficient: ", silhouette,
-          "Extrinsic scores:",
-          "Homogeneity: ", homogeneity,
-          "Completeness: ", completeness,
-          "V-measure: ", v_measure,
-          "Adjusted Rand index: ", rand_index)
-
-
-my_data = pd.read_csv("processed_data.csv", sep=',')
-text = list(my_data["processed_text"])
+    print("Intrinsic scores:")
+    print("Silhouette coefficient: ", silhouette)
+    print("Extrinsic scores:")
+    print("Homogeneity: ", homogeneity)
+    print("Completeness: ", completeness)
+    print("V-measure: ", v_measure)
+    print("Adjusted Rand index: ", rand_index)
 
 
-clusters = 2                     # choose number of clusters here
-method = 'tf-idf'                # choose method here ('tf-idf', 'token frequency', 'tokens')
-
-clustering(text, clusters, method)
-scores()
-visualization()
+data = pd.read_csv("processed_data.csv", sep=',')
+methods = ['tf-idf', 'token frequency', 'tokens']
+clusters = [2, 6]
+for m in methods:
+    for c in clusters:
+        print(f'Clustering results using {c} clusters and method {m}')
+        visualization(*clustering(data["processed_text"], c, m))
+        print()
