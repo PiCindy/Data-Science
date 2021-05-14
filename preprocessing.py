@@ -1,5 +1,4 @@
 import nltk
-import extraction
 import pandas as pd
 from nltk.corpus import stopwords
 
