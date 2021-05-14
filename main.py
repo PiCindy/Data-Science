@@ -1,5 +1,5 @@
 import nltk
-#import extraction
+import extraction
 import pandas as pd
 from nltk.corpus import stopwords
 
@@ -20,13 +20,13 @@ def preprocessing(text):
     processed = [token for token in processed if token not in en_stopwords]
     return ' '.join(processed)
 
-df = pd.read_csv('data.csv')
+df = pd.read_csv('data.csv', sep=',')
 data = pd.DataFrame()
 data['person'] = df['person']
 data['text'] = df['text']
 data['processed_text'] = df['text'].apply(preprocessing)
 data['description'] = df['description']
 data['processed_description'] = df['description'].apply(preprocessing)
-data['category'] = df['category']
 data['type'] = df['type']
-data.to_csv('processed_data.csv')
+data['category'] = df['category']
+data.to_csv('processed_data.csv', index=False)

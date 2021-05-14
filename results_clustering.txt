@@ -1,0 +1,54 @@
+Clustering results using 2 clusters and method tf-idf
+Intrinsic scores:
+Silhouette coefficient:  0.007469601583475127
+Extrinsic scores:
+Homogeneity:  0.04764311872147774
+Completeness:  0.04764736205650465
+V-measure:  0.047645240294512226
+Adjusted Rand index:  0.06005821885267107
+
+Clustering results using 6 clusters and method tf-idf
+Intrinsic scores:
+Silhouette coefficient:  0.050534147538848356
+Extrinsic scores:
+Homogeneity:  0.2206349679315596
+Completeness:  0.4364808310488623
+V-measure:  0.29310795543381984
+Adjusted Rand index:  0.19269617430978958
+
+Clustering results using 2 clusters and method token frequency
+Intrinsic scores:
+Silhouette coefficient:  0.8926373013208181
+Extrinsic scores:
+Homogeneity:  0.005577943863212365
+Completeness:  0.1124266459657679
+V-measure:  0.010628561496381642
+Adjusted Rand index:  0.0
+
+Clustering results using 6 clusters and method token frequency
+Intrinsic scores:
+Silhouette coefficient:  0.09003555940258857
+Extrinsic scores:
+Homogeneity:  0.0690087843680493
+Completeness:  0.23747783126115476
+V-measure:  0.10694141677964657
+Adjusted Rand index:  0.013281048804570065
+
+Clustering results using 2 clusters and method tokens
+Intrinsic scores:
+Silhouette coefficient:  0.5114670360305629
+Extrinsic scores:
+Homogeneity:  0.005577943863212365
+Completeness:  0.1124266459657679
+V-measure:  0.010628561496381642
+Adjusted Rand index:  0.0
+
+Clustering results using 6 clusters and method tokens
+Intrinsic scores:
+Silhouette coefficient:  0.07051063786512189
+Extrinsic scores:
+Homogeneity:  0.18103372149347005
+Completeness:  0.5194403265940718
+V-measure:  0.2684930745795628
+Adjusted Rand index:  0.06034579541134186
+

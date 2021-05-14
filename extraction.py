@@ -17,7 +17,7 @@ def create_list(q, k):
     '''
     # Creating the SPARQL query
     query = "select distinct ?item where {?item wdt:P31 wd:Q5; wdt:P106 wd:%s.}" %(q)
-    sparql = SPARQLWrapper("http://query.wikidata.org/sparql")
+    sparql = SPARQLWrapper("http://query.wikidata.org/sparql", agent='sparqlwrapper 1.8.5 (rd-flib.github.io/sparqlwrapper)')
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
     # Getting the results
@@ -70,8 +70,6 @@ def create_data(persons, category, k, n):
             # Adding a list with info in data
             data.append([title, category, t, desc, sentences])
         # If an exception is found, we cannot have all info and we ignore this person
-        # Problem -> Not k persons in this category
-        # Should replace this person by another one (create lists with more people?)
         except wikipedia.exceptions.PageError:
             continue
         except LookupError:
@@ -104,7 +102,8 @@ def extraction(k=30, n=5):
     data = []
     for v, c in zip(variables, categories):
         data.extend(create_data(v, c, k, n))
-    data.to_csv('data.csv')
+    df = pd.DataFrame(data, columns = ['person', 'category', 'type', 'description', 'text'])
+    df.to_csv('data.csv', index=False)
 
 
 if __name__ == "__main__":
