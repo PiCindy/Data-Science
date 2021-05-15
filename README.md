@@ -1,5 +1,5 @@
 Justine DILIBERTO,
-Anna NIKIFOROVSKAYA,
+Anna NIKIFOROVSKAJA,
 Cindy PEREIRA
 
 # M1 NLP Data Science project: Clustering and Classifying People based on Text and KB information
@@ -14,6 +14,7 @@ Collection of information about people belonging to different categories (singer
 	- TFIDF
 	- Token
 	- Token-frequency
+
 Each representation method is applied on two numbers of clusters:
 	- 2 clusters (Types - A or Z)
 	- 6 clusters (Categories - singers, writers, painters, architects, politicians, mathematicians)
@@ -21,6 +22,7 @@ Each representation method is applied on two numbers of clusters:
 	- Stochastic Gradient Descent Classifier
 	- Support Vector Classifier
 	- Multi-layer Perceptron Classifier
+
 Each algorithm is applied on two kinds of information:
 	- Types (A or Z)
 	- Categories (singers, writers, painters, architects, politicians, mathematicians)
@@ -32,19 +34,17 @@ Each algorithm is applied on two kinds of information:
 
 ## Run the program
 
-# Needs modifications
+To run the program, launch main.py using the following optional arguments:
+- \-\-parameters or -p followed by two integers corresponding to the number of people per category and the number of sentences per person. This is an optional argument as ready-to-use data is provided with the program (default values: 30 and 5).
+> python3 main.py -p 10 3
 
-To run the program, launch main.py using (for example):
-> python3 main.py
+**Warning**: The extraction of information may take a long time.
 
-In main.py, the line 8 is commented. It is not necessary to run the extraction if you want to keep the basic data (with 30 persons per category and 5 sentences per person). If needed, it is possible to re-extract this basic data without providing any argument by uncommenting this line:
-> l.8 extraction.extraction()
+- \-\-classification or \-\-no-classification can be used to show the results of classification methods or to not run it. By default, it will run.
+> python3 main.py --no-classification
 
-If you want to change these parameters, you can run it this way:
-> l.8 extraction.extraction(nb_of_persons_per_category, nb_of_sentences_per_person)
-
-The line 10 is commented. If you kept the basic data, the preprocessed data is already created. If you changed the extraction parameters, you need to run the preprocessing program by uncommenting this line:
-> l.10 preprocessing.main()
+- \-\-clustering or \-\-no-clustering can be used to show the results of clustering methods or to not run it. By default, it will run.
+> python3 main.py --no-clustering
 
 ## Libraries used
 
@@ -55,3 +55,4 @@ The line 10 is commented. If you kept the basic data, the preprocessed data is a
 - pandas
 - SPARQLWrapper
 - sklearn
+- argparse

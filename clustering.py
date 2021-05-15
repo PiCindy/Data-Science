@@ -55,7 +55,7 @@ def clustering(data, n, m):
     return pred_labels, matrix, n
 
 
-def scores(pred_labels, matrix, n):
+def scores(data, pred_labels, matrix, n):
     """
     Compute evaluation scores
     Output: silhouette coeff, homogeneity, completeness, v-measure, adjusted Rand index
@@ -82,14 +82,14 @@ def scores(pred_labels, matrix, n):
     return sil, homo, compl, vm, rand
 
 
-def visualization(pred_labels, matrix, n):
+def visualization(data, pred_labels, matrix, n):
     """
     Visualise metrics for each input representation
     5 scores for each possible result (2/6 clusters, token/tokens freq/tf-idf)
     Output: Print each score
     """
     # Running the scores() function, and storing the results
-    silhouette, homogeneity, completeness, v_measure, rand_index = scores(pred_labels, matrix, n)
+    silhouette, homogeneity, completeness, v_measure, rand_index = scores(data, pred_labels, matrix, n)
 
     # Printing all the results
     print("Intrinsic scores:")
@@ -100,11 +100,7 @@ def visualization(pred_labels, matrix, n):
     print("V-measure:", v_measure)
     print("Adjusted Rand index:", rand_index)
 
-
-# Launch the whole program
-if __name__ == "__main__":
-    # Importing the data to be used as input
-    data = pd.read_csv('data/processed_data.csv', sep=',')
+def main(data):
     # Listing the 3 methods to be tested
     methods = ['tf-idf', 'token frequency', 'tokens']
     # Listing the numbers of clusters to be tested
@@ -116,6 +112,12 @@ if __name__ == "__main__":
             # Displaying which method and the number of clusters are used
             print(f'Clustering results using {c} clusters and method {m}')
             # Running the clustering and visualization functions
-            visualization(*clustering(data["processed_text"], c, m))
+            visualization(data, *clustering(data["processed_text"], c, m))
             # Print a blank line to separate different tests
             print()
+
+
+# Launch the whole program
+if __name__ == "__main__":# Importing the data to be used as input
+    data = pd.read_csv('data/processed_data.csv', sep=',')
+    main(data)

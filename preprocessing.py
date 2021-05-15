@@ -20,9 +20,7 @@ def preprocessing(text):
     # Returns the string of tokens
     return ' '.join(processed)
 
-if __name__ == "__main__":
-    # Importing data
-    df = pd.read_csv('data/data.csv', sep=',')
+def main(df):
     # Creating a new dataframe
     data = pd.DataFrame()
     # Creating the dataframe
@@ -37,3 +35,8 @@ if __name__ == "__main__":
     data['category'] = df['category']
     # Storing the processed data in a csv file
     data.to_csv('data/processed_data.csv', index=False)
+
+if __name__ == "__main__":
+    # Importing data
+    df = pd.read_csv('data/data.csv', sep=',')
+    main(df)

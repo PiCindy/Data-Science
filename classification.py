@@ -94,8 +94,11 @@ def run_classification(data):
         # Visualizing results
         visualize_classification_results(algo.__class__.__name__, "types", y_type_test, y_pred)
 
+def main(data):
+    # Running the classification method
+    run_classification(data)
+
 if __name__ == "__main__":
     # Importing the data to be used as input
     data = pd.read_csv('data/processed_data.csv')
-    # Running the classification method
-    run_classification(data)
+    main(data)
